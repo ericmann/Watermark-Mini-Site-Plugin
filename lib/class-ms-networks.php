@@ -639,7 +639,7 @@ class MS_Networks {
 			          arrTbox[i] = tbox.options[i].text;
 			     }
 			     var fLength = 0;
-			     var tLength = arrTbox.length
+			     var tLength = arrTbox.length;
 			     for(i=0; i<fbox.options.length; i++) {
 			          arrLookup[fbox.options[i].text] = fbox.options[i].value;
 			          if(fbox.options[i].selected && fbox.options[i].value != "") {
