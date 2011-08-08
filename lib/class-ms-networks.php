@@ -3,7 +3,7 @@ if ( ! class_exists( 'MS_Networks' ) ) :
 
 class MS_Networks {
 	public static function init() {
-		add_action( 'admin_menu',      array( 'MS_Networks', 'admin_menu' ) );
+		add_action( 'network_admin_menu',      array( 'MS_Networks', 'admin_menu' ) );
 		add_action( 'wpmublogsaction', array( 'MS_Networks', 'assign_blogs_link' ) );
 	}
 
@@ -14,7 +14,7 @@ class MS_Networks {
 	}
 
 	public static function admin_menu() {
-		add_submenu_page( 'ms-admin.php', __( 'Networks' ), __( 'Networks' ), 'manage_options', 'networks', array( 'MS_Networks', 'networks_page' ) );
+		add_submenu_page( 'sites.php', __( 'Networks' ), __( 'Networks' ), 'manage_options', 'networks', array( 'MS_Networks', 'networks_page' ) );
 	}
 
 	/* Config Page*/
@@ -57,6 +57,8 @@ class MS_Networks {
 		endif;
 
 		print '<div class="wrap" style="position: relative">';
+
+		$_GET['action'] = isset($_GET['action']) ? $_GET['action'] : "default";
 
 		switch( $_GET[ 'action' ] ) {
 			case 'move':
@@ -127,7 +129,7 @@ class MS_Networks {
 						break;
 				}
 
-				if( $_GET[ 'order' ] == 'DESC' )
+				if( isset($_GET['order']) && $_GET[ 'order' ] == 'DESC' )
 					$query .= 'DESC';
 				else
 					$query .= 'ASC';
@@ -393,7 +395,7 @@ class MS_Networks {
 <?php
 
 				break;
-			} // end switch( $action )
+		} // end switch( $action )
 ?>
 		</div>
 <?php

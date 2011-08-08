@@ -75,5 +75,6 @@ if ( version_compare( PHP_VERSION, '5.0', '<' ) ) {
 
 	// Initialize all of the plugin's hooks.
 	Watermark_Mini_Site::init();
+	MS_Networks::init();
 }
 ?>
