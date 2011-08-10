@@ -3,10 +3,8 @@ if ( ! class_exists( 'MS_Networks' ) ) :
 
 class MS_Networks {
 	public static function init() {
-		add_action( 'network_admin_menu',      array( 'MS_Networks', 'admin_menu' ) );
-		add_action( 'wpmublogsaction', array( 'MS_Networks', 'assign_blogs_link' ) );
-	}
 
+	}
 
 	public static function assign_blogs_link() {
 		global $blog;

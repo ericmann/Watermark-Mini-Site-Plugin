@@ -72,9 +72,11 @@ if ( version_compare( PHP_VERSION, '5.0', '<' ) ) {
 	// Load required class definitions.
 	require_once( 'lib/class-watermark-mini-site.php' );
 	require_once( 'lib/class-ms-networks.php' );
+	require_once( 'lib/class-mini-site-admin.php' );
 
 	// Initialize all of the plugin's hooks.
-	Watermark_Mini_Site::init();
-	MS_Networks::init();
+	add_action( 'network_admin_menu',   array( 'MS_Networks',               'admin_menu' ) );
+	add_action( 'wpmublogsaction',      array( 'MS_Networks',               'assign_blogs_link' ) );
+	add_action( 'admin_menu',           array( 'Watermark_Mini_Site_Admin', 'add_menu_page' ) );
 }
 ?>
