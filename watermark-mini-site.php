@@ -41,42 +41,30 @@ function _watermark_mini_site_php_warning() {
 	echo '</div>';
 }
 
+function _watermark_mini_site_relations_warning() {
+	echo '<div id="message" class="error">';
+	echo '  <p>The Watermark Mini-Site Plugin depends on the Relation Post Types plugin. Please install it before continuing!</p>';
+	echo '</div>';
+}
+
 if ( version_compare( PHP_VERSION, '5.0', '<' ) ) {
-	add_action('admin_notices', '_watermark_mini_site_php_warning');
+	add_action( 'admin_notices', '_watermark_mini_site_php_warning' );
+} elseif( ! defined('RPT_VERSION') ) {
+	add_action( 'admin_notices', '_watermark_mini_site_relations_warning' );
 } else {
 
-	if ( !defined( 'ENABLE_NETWORK_ZERO' ) )
-		define( 'ENABLE_NETWORK_ZERO', true );
-
-	if ( !defined( 'RESCUE_ORPHANED_BLOGS' ) )
-		define( 'RESCUE_ORPHANED_BLOGS', false );
-
-	/* blog options affected by URL */
-	$options_list = array( 'siteurl', 'home', 'fileupload_url' );
-
-	/* sitemeta options to be copied on clone */
-	$options_to_copy = array(
-		'admin_email'				=> __( 'Network admin email' ),
-		'admin_user_id'				=> __( 'Admin user ID - deprecated' ),
-		'allowed_themes'			=> __( 'OLD List of allowed themes - deprecated' ),
-		'allowedthemes'				=> __( 'List of allowed themes' ),
-		'banned_email_domains'		=> __( 'Banned email domains' ),
-		'first_post'				=> __( 'Content of first post on a new blog' ),
-		'limited_email_domains'		=> __( 'Permitted email domains' ),
-		'site_admins'				=> __( 'List of network admin usernames' ),
-		'welcome_email'				=> __( 'Content of welcome email' )
-	);
-
-	define( 'NETWORKS_PER_PAGE', 10 );
+	if( ! defined('MINI_SITE_PLUGIN_DIR') )
+		define( 'MINI_SITE_PLUGIN_DIR', WP_PLUGIN_URL . '/watermark-mini-site' );
 
 	// Load required class definitions.
-	require_once( 'lib/class-watermark-mini-site.php' );
-	require_once( 'lib/class-ms-networks.php' );
-	require_once( 'lib/class-mini-site-admin.php' );
+	require_once( 'lib/class-mini-site.php' );
 
 	// Initialize all of the plugin's hooks.
-	add_action( 'network_admin_menu',   array( 'MS_Networks',               'admin_menu' ) );
-	add_action( 'wpmublogsaction',      array( 'MS_Networks',               'assign_blogs_link' ) );
-	add_action( 'admin_menu',           array( 'Watermark_Mini_Site_Admin', 'add_menu_page' ) );
+	add_action( 'init',                      array( 'Mini_Site', 'resident_post_type' ) );
+	add_action( 'init',                      array( 'Mini_Site', 'register_sidebar' ) );
+	add_action( 'do_meta_boxes',             array( 'Mini_Site', 'add_headshot' ) );
+
+	add_filter( 'enter_title_here',          array( 'Mini_Site', 'enter_name_here' ) );
+	add_filter( 'admin_post_thumbnail_html', array( 'Mini_Site', 'rename_headshot' ), 10 );
 }
 ?>
