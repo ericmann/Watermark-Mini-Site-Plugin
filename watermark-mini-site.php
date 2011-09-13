@@ -62,9 +62,11 @@ if ( version_compare( PHP_VERSION, '5.0', '<' ) ) {
 	// Initialize all of the plugin's hooks.
 	add_action( 'init',                      array( 'Mini_Site', 'resident_post_type' ) );
 	add_action( 'init',                      array( 'Mini_Site', 'register_sidebar' ) );
+	add_action( 'init',                      array( 'Mini_Site', 'register_post_status' ) );
 	add_action( 'do_meta_boxes',             array( 'Mini_Site', 'add_headshot' ) );
 
 	add_filter( 'enter_title_here',          array( 'Mini_Site', 'enter_name_here' ) );
 	add_filter( 'admin_post_thumbnail_html', array( 'Mini_Site', 'rename_headshot' ), 10 );
 }
+
 ?>

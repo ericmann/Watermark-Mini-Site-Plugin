@@ -101,6 +101,52 @@ class Mini_Site {
 		global $post;
 		echo Mini_Site::get_tags_with_count( $post, $format, $before, $sep, $after );
 	}
+
+	public static function get_album_id( $name ) {
+		if(!defined('WPPA_ALBUMS')) return null;
+		
+		global $wpdb;
+		
+		$album = $wpdb->query($wpdb->prepare("SELECT id FROM " . WPPA_ALBUMS . " WHERE name = %s", $name));
+
+		return $album;
+	}
+
+	public static function comments( $comment, $args ) {
+		$GLOBALS['comment'] = $comment;
+
+			?>
+	<li id="comment-<?php comment_ID(); ?>" <?php comment_class(); ?>>
+		<?php do_action( 'p2_comment' ); ?>
+
+		<?php echo get_avatar( $comment, 32 ); ?>
+		<h4>
+			<?php echo get_comment_author_link(); ?>
+		</h4>
+		<div id="commentcontent-<?php comment_ID(); ?>" class="<?php echo esc_attr( $content_class ); ?>"><?php
+				echo apply_filters( 'comment_text', $comment->comment_content );
+
+				if ( $comment->comment_approved == '0' ): ?>
+					<p><em><?php esc_html_e( 'Your comment is awaiting moderation.', 'p2' ); ?></em></p>
+				<?php endif; ?>
+		</div>
+	<?php
+	}
+
+	public static function register_post_status() {
+		$args = array(
+			'label' => 'Hidden',
+			'public' => false,
+			'label_count' => _n_noop( 'Hidden <span class="count">(%s)</span>', 'Hidden <span class="count">(%s)</span>' ),
+			'exclude_from_search' => false,
+			'show_in_admin_all' => false,
+			'publicly_queryable' => true,
+			'show_in_admin_status_list' => true,
+			'show_in_admin_all_list' => false
+		);
+
+		register_post_Status( 'hidden', $args );
+	}
 }
 
 endif;
